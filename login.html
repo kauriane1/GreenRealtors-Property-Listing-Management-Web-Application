@@ -310,7 +310,8 @@
       <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password">
     </div>
 
-    <button onclick="loginUser()">Login</button>
+    <!-- Fixed button -->
+    <button class="login-btn" onclick="handleLogin()">Login</button>
 
     <a href="index.html" class="back-link">← Back to listings</a>
 
@@ -322,28 +323,13 @@
 </div>
 
 <script>
-    function loginUser() {
-
-let username = document.getElementById("username").value;
-let password = document.getElementById("password").value;
-
-if(username === "admin" && password === "1234"){
-    window.location.href = "admin.html";
-}
-else if(username === "agent" && password === "1234"){
-    window.location.href = "index.html";
-}
-else{
-    document.getElementById("error").innerText = "Invalid login details. Please try again.";
-}
-
-}
-  // Simple credential check — in production, use a real auth backend
+  // Credential storage
   const STAFF_CREDENTIALS = [
     { username: 'admin', password: 'green2025' },
     { username: 'staff', password: 'realty123' }
   ];
 
+  // Login handler
   function handleLogin() {
     const u = document.getElementById('username').value.trim();
     const p = document.getElementById('password').value;
@@ -357,17 +343,18 @@ else{
       window.location.href = 'admin.html';
     } else {
       err.classList.remove('show');
-      void err.offsetWidth;
+      void err.offsetWidth; // reset animation
       err.classList.add('show');
       document.getElementById('password').value = '';
     }
   }
 
+  // Press Enter to login
   document.addEventListener('keydown', e => {
     if (e.key === 'Enter') handleLogin();
   });
 
-  // If already logged in, redirect
+  // Redirect if already logged in
   if (sessionStorage.getItem('gr_staff_auth') === 'true') {
     window.location.href = 'admin.html';
   }
