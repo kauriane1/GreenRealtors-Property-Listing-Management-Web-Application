@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GreenRealtors – Staff Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --forest: #1a3a2a;
+      --sage: #4a7c59;
+      --mint: #a8d5b5;
+      --cream: #f8f4ee;
+      --warm: #e8ddd0;
+      --gold: #c9a84c;
+      --text: #1c1c1c;
+      --muted: #6b7a6e;
+      --error: #c0392b;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--forest);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* LEFT PANEL */
+    .left-panel {
+      width: 45%;
+      min-height: 100vh;
+      background: var(--forest);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 50px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .left-panel::before {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(74,124,89,0.4) 0%, transparent 70%);
+      bottom: -100px; left: -100px;
+      pointer-events: none;
+    }
+
+    .left-panel::after {
+      content: '';
+      position: absolute;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      border: 1px solid rgba(168,213,181,0.15);
+      top: 80px; right: -80px;
+      pointer-events: none;
+    }
+
+    .panel-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--cream);
+      letter-spacing: -0.5px;
+    }
+
+    .panel-logo span { color: var(--mint); }
+
+    .panel-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .panel-content h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--cream);
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .panel-content h2 em {
+      font-style: italic;
+      color: var(--mint);
+    }
+
+    .panel-content p {
+      color: rgba(255,255,255,0.5);
+      font-size: 1rem;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .panel-decor {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .decor-line {
+      height: 1px;
+      flex: 1;
+      background: rgba(168,213,181,0.2);
+    }
+
+    .decor-text {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* RIGHT PANEL */
+    .right-panel {
+      flex: 1;
+      background: var(--cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 70px;
+      position: relative;
+    }
+
+    .right-panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 4px;
+      background: linear-gradient(90deg, var(--sage), var(--mint));
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 380px;
+      animation: slideIn 0.6s ease-out forwards;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .login-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--forest);
+      margin-bottom: 8px;
+    }
+
+    .login-box .subtitle {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 40px;
+    }
+
+    .field {
+      margin-bottom: 22px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1.5px solid rgba(74,124,89,0.2);
+      border-radius: 3px;
+      background: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .field input:focus {
+      border-color: var(--sage);
+      box-shadow: 0 0 0 3px rgba(74,124,89,0.1);
+    }
+
+    .field input::placeholder { color: #bbb; }
+
+    .error-msg {
+      display: none;
+      background: rgba(192,57,43,0.08);
+      border-left: 3px solid var(--error);
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      color: var(--error);
+      border-radius: 2px;
+      margin-bottom: 20px;
+    }
+
+    .error-msg.show { display: block; animation: shake 0.4s ease; }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--forest);
+      color: var(--cream);
+      border: none;
+      border-radius: 3px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.08) 50%, transparent 70%);
+      transform: translateX(-100%);
+      transition: transform 0.5s;
+    }
+
+    .login-btn:hover::after { transform: translateX(100%); }
+    .login-btn:hover { background: var(--sage); transform: translateY(-1px); }
+    .login-btn:active { transform: translateY(0); }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--sage); }
+
+    .hint {
+      margin-top: 32px;
+      padding: 16px;
+      background: rgba(74,124,89,0.06);
+      border: 1px dashed rgba(74,124,89,0.25);
+      border-radius: 3px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .hint strong { color: var(--sage); }
+
+    @media (max-width: 768px) {
+      body { flex-direction: column; }
+      .left-panel { width: 100%; min-height: 200px; padding: 32px; }
+      .panel-content h2 { font-size: 2rem; }
+      .right-panel { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="left-panel">
+  <div class="panel-logo">Green<span>Realtors</span></div>
+  <div class="panel-content">
+    <h2>Staff<br><em>Portal</em></h2>
+    <p>Secure access for GreenRealtors team members to manage property listings.</p>
+  </div>
+  <div class="panel-decor">
+    <div class="decor-line"></div>
+    <span class="decor-text">Authorized Personnel Only</span>
+    <div class="decor-line"></div>
+  </div>
+</div>
+
+<div class="right-panel">
+  <div class="login-box">
+    <h3>Welcome back</h3>
+    <p class="subtitle">Sign in to manage your listings</p>
+
+    <div class="error-msg" id="errorMsg">Invalid username or password. Please try again.</div>
+
+    <div class="field">
+      <label>Username</label>
+      <input type="text" id="username" placeholder="Enter your username" autocomplete="username">
+    </div>
+
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password">
+    </div>
+
+    <button class="login-btn" onclick="handleLogin()">Sign In</button>
+
+    <a href="index.html" class="back-link">← Back to listings</a>
+
+    <div class="hint">
+      <strong>Demo credentials:</strong><br>
+      Username: <strong>admin</strong> &nbsp;|&nbsp; Password: <strong>green2025</strong>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Simple credential check — in production, use a real auth backend
+  const STAFF_CREDENTIALS = [
+    { username: 'admin', password: 'green2025' },
+    { username: 'staff', password: 'realty123' }
+  ];
+
+  function handleLogin() {
+    const u = document.getElementById('username').value.trim();
+    const p = document.getElementById('password').value;
+    const err = document.getElementById('errorMsg');
+
+    const valid = STAFF_CREDENTIALS.some(c => c.username === u && c.password === p);
+
+    if (valid) {
+      sessionStorage.setItem('gr_staff_auth', 'true');
+      sessionStorage.setItem('gr_staff_user', u);
+      window.location.href = 'admin.html';
+    } else {
+      err.classList.remove('show');
+      void err.offsetWidth;
+      err.classList.add('show');
+      document.getElementById('password').value = '';
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleLogin();
+  });
+
+  // If already logged in, redirect
+  if (sessionStorage.getItem('gr_staff_auth') === 'true') {
+    window.location.href = 'admin.html';
+  }
+</script>
+</body>
+</html>

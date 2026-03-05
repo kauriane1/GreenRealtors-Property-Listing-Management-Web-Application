@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GreenRealtors – Find Your Space</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --forest: #1a3a2a;
+      --sage: #4a7c59;
+      --mint: #a8d5b5;
+      --cream: #f8f4ee;
+      --warm: #e8ddd0;
+      --gold: #c9a84c;
+      --text: #1c1c1c;
+      --muted: #6b7a6e;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 60px;
+      background: rgba(248,244,238,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(74,124,89,0.15);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--forest);
+      letter-spacing: -0.5px;
+    }
+
+    .nav-logo span { color: var(--sage); }
+
+    nav a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--forest); }
+
+    .nav-staff {
+      background: var(--forest);
+      color: var(--cream) !important;
+      padding: 10px 22px;
+      border-radius: 2px;
+      transition: background 0.2s !important;
+    }
+
+    .nav-staff:hover { background: var(--sage) !important; color: var(--cream) !important; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 120px 60px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 75% 40%, rgba(74,124,89,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 85% 80%, rgba(201,168,76,0.08) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 900;
+      line-height: 1.0;
+      color: var(--forest);
+      max-width: 700px;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.35s forwards;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--sage);
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 440px;
+      line-height: 1.7;
+      margin-bottom: 44px;
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.5s forwards;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      background: var(--forest);
+      color: var(--cream);
+      text-decoration: none;
+      padding: 16px 40px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: background 0.25s, transform 0.2s;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.65s forwards;
+    }
+
+    .hero-cta:hover { background: var(--sage); transform: translateY(-2px); }
+
+    .hero-badge {
+      position: absolute;
+      right: 60px; bottom: 80px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: var(--forest);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: var(--cream);
+      text-align: center;
+      animation: rotate 20s linear infinite;
+    }
+
+    .hero-badge-inner {
+      position: absolute;
+      width: 130px; height: 130px;
+      border-radius: 50%;
+      background: var(--cream);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: var(--forest);
+    }
+
+    .hero-badge-inner span:first-child {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--sage);
+    }
+
+    .hero-badge-inner span:last-child {
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* LISTINGS SECTION */
+    .listings-section {
+      padding: 100px 60px;
+      background: var(--warm);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 60px;
+    }
+
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--forest);
+      line-height: 1.1;
+    }
+
+    .section-header p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* SEARCH BAR */
+    .search-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 50px;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 14px 20px;
+      border: 1.5px solid rgba(74,124,89,0.3);
+      border-radius: 2px;
+      background: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-bar input:focus { border-color: var(--sage); }
+
+    .search-bar input::placeholder { color: var(--muted); }
+
+    .search-bar button {
+      padding: 14px 28px;
+      background: var(--sage);
+      color: white;
+      border: none;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .search-bar button:hover { background: var(--forest); }
+
+    /* PROPERTY GRID */
+    .property-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 28px;
+    }
+
+    .property-card {
+      background: var(--cream);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+
+    .property-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(26,58,42,0.12);
+    }
+
+    .card-image {
+      height: 200px;
+      background: linear-gradient(135deg, var(--mint) 0%, var(--sage) 100%);
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      padding: 20px;
+    }
+
+    .card-image .price-tag {
+      background: var(--forest);
+      color: var(--cream);
+      padding: 8px 16px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 2px;
+    }
+
+    .card-image .property-icon {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3.5rem;
+      opacity: 0.3;
+    }
+
+    .card-body { padding: 24px; }
+
+    .card-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--forest);
+      margin-bottom: 8px;
+    }
+
+    .card-location {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-bottom: 14px;
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-footer {
+      padding: 16px 24px;
+      border-top: 1px solid rgba(74,124,89,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-footer span {
+      font-size: 0.75rem;
+      color: var(--mint);
+      background: var(--forest);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    .card-footer a {
+      font-size: 0.8rem;
+      color: var(--sage);
+      text-decoration: none;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    .card-footer a:hover { border-color: var(--sage); }
+
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--muted);
+      grid-column: 1 / -1;
+    }
+
+    .empty-state .icon { font-size: 3rem; margin-bottom: 16px; }
+
+    .empty-state h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--forest);
+      margin-bottom: 8px;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--forest);
+      color: rgba(255,255,255,0.5);
+      padding: 40px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: var(--cream);
+    }
+
+    .footer-logo span { color: var(--mint); }
+
+    footer p { font-size: 0.8rem; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .hero { padding: 100px 24px 60px; }
+      .listings-section { padding: 60px 24px; }
+      .hero-badge { display: none; }
+      footer { flex-direction: column; gap: 12px; text-align: center; padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Green<span>Realtors</span></div>
+  <a href="login.html" class="nav-staff">Staff Login</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">Premium Properties · Trusted Since 2010</p>
+  <h1>Find Your <em>Perfect</em><br>Space</h1>
+  <p>Curated real estate listings in prime locations. Browse our handpicked portfolio of exceptional properties.</p>
+  <a href="#listings" class="hero-cta">Explore Properties</a>
+
+  <div class="hero-badge">
+    <div class="hero-badge-inner">
+      <span id="heroCount">0</span>
+      <span>Listings</span>
+    </div>
+  </div>
+</section>
+
+<!-- LISTINGS -->
+<section class="listings-section" id="listings">
+  <div class="section-header">
+    <h2>Available<br>Properties</h2>
+    <p id="listingCount">Loading...</p>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search by title, location...">
+    <button onclick="filterProperties()">Search</button>
+  </div>
+
+  <div class="property-grid" id="propertyGrid"></div>
+</section>
+
+<footer>
+  <div class="footer-logo">Green<span>Realtors</span></div>
+  <p>© 2025 GreenRealtors. All rights reserved.</p>
+</footer>
+
+<script>
+  const icons = ['🏡', '🏢', '🏠', '🏗️', '🏘️'];
+
+  function getProperties() {
+    return JSON.parse(localStorage.getItem('properties')) || [];
+  }
+
+  function formatPrice(price) {
+    return Number(price).toLocaleString('en-US');
+  }
+
+  function renderProperties(list) {
+    const grid = document.getElementById('propertyGrid');
+    const countEl = document.getElementById('listingCount');
+    const heroCount = document.getElementById('heroCount');
+
+    heroCount.textContent = list.length;
+    countEl.textContent = `${list.length} propert${list.length !== 1 ? 'ies' : 'y'} available`;
+
+    if (list.length === 0) {
+      grid.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">🌿</div>
+          <h3>No properties yet</h3>
+          <p>Check back soon — new listings are added regularly.</p>
+        </div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map((p, i) => `
+      <div class="property-card">
+        <div class="card-image">
+          <span class="property-icon">${icons[i % icons.length]}</span>
+          <div class="price-tag">$${formatPrice(p.price)}</div>
+        </div>
+        <div class="card-body">
+          <h3>${p.title}</h3>
+          <div class="card-location">
+            <svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M6 0C3.79 0 2 1.79 2 4c0 3 4 8.5 4 8.5S10 7 10 4c0-2.21-1.79-4-4-4zm0 5.5C5.17 5.5 4.5 4.83 4.5 4S5.17 2.5 6 2.5 7.5 3.17 7.5 4 6.83 5.5 6 5.5z" fill="#4a7c59"/></svg>
+            ${p.location}
+          </div>
+          <p class="card-desc">${p.description}</p>
+        </div>
+        <div class="card-footer">
+          <span>Available</span>
+          <a href="#">Enquire →</a>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function filterProperties() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const all = getProperties();
+    const filtered = q ? all.filter(p =>
+      p.title.toLowerCase().includes(q) ||
+      p.location.toLowerCase().includes(q) ||
+      p.description.toLowerCase().includes(q)
+    ) : all;
+    renderProperties(filtered);
+  }
+
+  document.getElementById('searchInput').addEventListener('keyup', e => {
+    if (e.key === 'Enter') filterProperties();
+    if (e.target.value === '') renderProperties(getProperties());
+  });
+
+  renderProperties(getProperties());
+</script>
+</body>
+</html>
