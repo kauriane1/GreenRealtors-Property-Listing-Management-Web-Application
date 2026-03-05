@@ -322,6 +322,22 @@
 </div>
 
 <script>
+    function loginUser() {
+
+let username = document.getElementById("username").value;
+let password = document.getElementById("password").value;
+
+if(username === "admin" && password === "1234"){
+    window.location.href = "admin.html";
+}
+else if(username === "agent" && password === "1234"){
+    window.location.href = "index.html";
+}
+else{
+    document.getElementById("error").innerText = "Invalid login details. Please try again.";
+}
+
+}
   // Simple credential check — in production, use a real auth backend
   const STAFF_CREDENTIALS = [
     { username: 'admin', password: 'green2025' },
